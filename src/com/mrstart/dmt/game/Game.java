@@ -8,6 +8,8 @@ import com.mrstart.dmt.task.TaskAddLetter;
 import com.mrstart.dmt.task.TaskAlert;
 import com.mrstart.dmt.task.TaskNextRound;
 import com.mrstart.dmt.task.TaskStart;
+import io.puharesource.mc.titlemanager.api.ActionbarTitleObject;
+import io.puharesource.mc.titlemanager.api.TitleObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,7 +31,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -133,7 +134,7 @@ public class Game
 		ItemMeta em = eraser.getItemMeta();
 		em.setDisplayName((new StringBuilder()).append(ChatColor.RED).append("Eraser").toString());
 		eraser.setItemMeta(em);
-		colorpicker = new ItemStack(Material.COMPASS);
+		colorpicker = new ItemStack(Material.WATCH);
 		ItemMeta ccm = colorpicker.getItemMeta();
 		ccm.setDisplayName((new StringBuilder()).append(ChatColor.GREEN).append("Choose Color").toString());
 		colorpicker.setItemMeta(ccm);
@@ -174,7 +175,7 @@ public class Game
 			inventories.remove(player);
 			player.setDisplayName(player.getName());
 			player.setGameMode((GameMode)gamemode.get(player));
-			//BarAPI.removeBar(player);
+			//BarAPI.removeBar(player); //TODO 
 			gamemode.remove(player);
 			board.resetScores(player);
 			player.setScoreboard(manager.getMainScoreboard());
@@ -227,14 +228,15 @@ public class Game
 					if(players > 0)
 					{
 						Player p;
-						for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); ChatUtil.send(p, (new StringBuilder()).append(ChatColor.GRAY).append(player.getName()).append(" has joined the game! (").append(String.valueOf(players)).append("/").append(String.valueOf((new StringBuilder(String.valueOf(maxplayers))).append(")").toString())).toString())) {
+						for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); new TitleObject(ChatColor.GOLD + "Starting soon!", ChatColor.GRAY + "("+ players + "/" + maxplayers + ") players").setFadeIn(0).setStay(20).setFadeOut(5).send(player)) {
 							p = (Player)iterator.next();
 						}
 						
 					}
 					if(players >= minplayers)
 					{
-						setTimedBarForAll((new StringBuilder()).append(ChatColor.GOLD).append(ChatColor.BOLD).append("Game Starting").toString(), 10);
+						//setTimedBarForAll((new StringBuilder()).append(ChatColor.GOLD).append(ChatColor.BOLD).append("Game Starting").toString(), 10);
+						new TitleObject(ChatColor.GOLD + "Starting soon!", ChatColor.GRAY + "("+ players + "/" + maxplayers + ") players").setFadeIn(5).setStay(80).setFadeOut(5).send(player);
 						TaskStart start = new TaskStart(this);
 						start.runTaskLater(instance, 200L);
 						tasks.add(start);
@@ -438,14 +440,14 @@ public class Game
 	
 	public void setBarForAll(String message) {
 		Player p;
-		for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); /*BarAPI.setMessage(p, message)*/) {
+		for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); new ActionbarTitleObject(message).send(p)) {
 			p = (Player)iterator.next();
 		}
 	}
 
 	public void setTimedBarForAll(String message, int seconds) {
 		Player p;
-		for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); /*BarAPI.setMessage(p, message, seconds)*/) {
+		for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); new ActionbarTitleObject(message).send(p)) {
 			p = (Player)iterator.next();
 		}
 	}

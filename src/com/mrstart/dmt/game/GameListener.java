@@ -118,7 +118,7 @@ public class GameListener
 			}
             return;
         }
-        if(event.getPlayer().getItemInHand().getType() == Material.COMPASS)
+        if(event.getPlayer().getItemInHand().getType() == Material.WATCH)
         {
             if(event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
             {

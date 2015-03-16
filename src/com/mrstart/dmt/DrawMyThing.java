@@ -22,7 +22,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -190,6 +189,7 @@ public class DrawMyThing extends JavaPlugin
 									ChatUtil.send(player, "A game with this name already exist!");
 								} else
 								{
+									//TODO Error checking for null
 									Location loc1 = LocationUtil.StringToLoc(player.getMetadata("bmtp1").get(0).asString());
 									Location loc2 = LocationUtil.StringToLoc(player.getMetadata("bmtp2").get(0).asString());
 									Location spawn = LocationUtil.StringToLoc(player.getMetadata("bmtspec").get(0).asString());
@@ -305,6 +305,7 @@ public class DrawMyThing extends JavaPlugin
 												{
 													if(player.hasPermission("dmt.admin"))
 													{
+														//TODO change this to work differently and have categories
 														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setcanvaspos1 ").append(ChatColor.GRAY).append("Set the first point to your current position").toString());
 														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setcanvaspos2 ").append(ChatColor.GRAY).append("Set the second point to your current position").toString());
 														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setspawn ").append(ChatColor.GRAY).append("Set the spawn point to your current position").toString());
