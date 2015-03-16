@@ -6,15 +6,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class TaskNextRound extends BukkitRunnable
 {
 
-    public TaskNextRound(Game buildZone)
-    {
-        this.buildZone = buildZone;
-    }
-
-    public void run()
-    {
-        buildZone.startRound();
-    }
 
     private final Game buildZone;
+
+	public TaskNextRound(Game buildZone) {
+		this.buildZone = buildZone;
+	}
+
+	public void run() {
+		buildZone.startRound();
+	}
 }

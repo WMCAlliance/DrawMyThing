@@ -1,11 +1,19 @@
 package com.mrstart.dmt.cuboid;
 
-import java.util.*;
-import org.bukkit.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 
 public class CuboidZone
 {
+	public Block corner1;
+	private Block corner2;
+	private World world;
 
     public CuboidZone(Block corner1, Block corner2)
     {
@@ -23,8 +31,9 @@ public class CuboidZone
     public void set(Material material)
     {
         Block b;
-        for(Iterator iterator = toArray().iterator(); iterator.hasNext(); b.setType(material))
-            b = (Block)iterator.next();
+        for(Iterator iterator = toArray().iterator(); iterator.hasNext(); b.setType(material)) {
+			b = (Block)iterator.next();
+		}
 
     }
 
@@ -46,8 +55,9 @@ public class CuboidZone
         {
             for(int y = minY; y <= maxY; y++)
             {
-                for(int z = minZ; z <= maxZ; z++)
-                    result.add(world.getBlockAt(new Location(world, x, y, z)));
+                for(int z = minZ; z <= maxZ; z++) {
+					result.add(world.getBlockAt(new Location(world, x, y, z)));
+				}
 
             }
 
@@ -89,20 +99,19 @@ public class CuboidZone
     public void clear()
     {
         Block b;
-        for(Iterator iterator = toArray().iterator(); iterator.hasNext(); b.setType(Material.AIR))
-            b = (Block)iterator.next();
+        for(Iterator iterator = toArray().iterator(); iterator.hasNext(); b.setType(Material.AIR)) {
+			b = (Block)iterator.next();
+		}
 
     }
 
     public void setWool(DyeColor dc)
     {
         Block b;
-        for(Iterator iterator = toArray().iterator(); iterator.hasNext(); b.setTypeIdAndData(Material.WOOL.getId(), dc.getData(), true))
-            b = (Block)iterator.next();
+        for(Iterator iterator = toArray().iterator(); iterator.hasNext(); b.setTypeIdAndData(Material.WOOL.getId(), dc.getData(), true)) {
+			b = (Block)iterator.next();
+		}
 
     }
 
-    public Block corner1;
-    private Block corner2;
-    private World world;
 }

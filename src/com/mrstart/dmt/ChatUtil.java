@@ -7,19 +7,6 @@ import org.bukkit.entity.Player;
 public class ChatUtil
 {
 
-    public ChatUtil()
-    {
-    }
-
-    public static void send(Player p, String message)
-    {
-        p.sendMessage((new StringBuilder(String.valueOf(PREFIX))).append(message).toString());
-    }
-
-    public static void broadcast(String message)
-    {
-        Bukkit.broadcastMessage((new StringBuilder(String.valueOf(PREFIX))).append(message).toString());
-    }
 
     private static final String PREFIX;
 
@@ -27,4 +14,15 @@ public class ChatUtil
     {
         PREFIX = (new StringBuilder()).append(ChatColor.BLUE).append("[DrawMyThing] ").append(ChatColor.WHITE).toString();
     }
+
+	public static void send(Player p, String message) {
+		p.sendMessage((new StringBuilder(String.valueOf(PREFIX))).append(message).toString());
+	}
+
+	public static void broadcast(String message) {
+		Bukkit.broadcastMessage((new StringBuilder(String.valueOf(PREFIX))).append(message).toString());
+	}
+
+	private ChatUtil() {
+	}
 }

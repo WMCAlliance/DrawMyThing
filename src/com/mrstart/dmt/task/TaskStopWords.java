@@ -6,14 +6,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class TaskStopWords extends BukkitRunnable
 {
 
-    public TaskStopWords()
-    {
-    }
-
-    public void run()
-    {
-        buildzone.setNotAcceptWords();
-    }
 
     private Game buildzone;
+
+	public TaskStopWords() {
+	}
+
+	public void run() {
+		buildzone.setNotAcceptWords();
+	}
 }
