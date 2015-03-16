@@ -1,23 +1,41 @@
 package com.mrstart.dmt.game;
 
-import com.mrstart.dmt.*;
+import com.mrstart.dmt.ChatUtil;
+import com.mrstart.dmt.DrawMyThing;
+import com.mrstart.dmt.LocationUtil;
 import com.mrstart.dmt.cuboid.CuboidZone;
-import com.mrstart.dmt.task.*;
-import java.util.*;
-import me.confuser.barapi.BarAPI;
-import org.bukkit.*;
+import com.mrstart.dmt.task.TaskAddLetter;
+import com.mrstart.dmt.task.TaskAlert;
+import com.mrstart.dmt.task.TaskNextRound;
+import com.mrstart.dmt.task.TaskStart;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 public class Game
     implements Listener
@@ -95,7 +113,7 @@ public class Game
             inventories.remove(player);
             player.setDisplayName(player.getName());
             player.setGameMode((GameMode)gamemode.get(player));
-            BarAPI.removeBar(player);
+            //BarAPI.removeBar(player);
             gamemode.remove(player);
             board.resetScores(player);
             player.setScoreboard(manager.getMainScoreboard());
@@ -138,7 +156,7 @@ public class Game
                     gamemode.put(player, player.getGameMode());
                     player.setGameMode(GameMode.ADVENTURE);
                     player.getInventory().clear();
-                    BarAPI.removeBar(player);
+                    //BarAPI.removeBar(player);
                     player.setMetadata("inbmt", new FixedMetadataValue(instance, getName()));
                     player.setScoreboard(board);
                     score.put(player, Integer.valueOf(0));
@@ -264,13 +282,12 @@ public class Game
         removeBarForAll();
         List toKick = new ArrayList();
         Player p;
-        for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); toKick.add(p))
+        for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); toKick.add(p)) {
             p = (Player)iterator.next();
-
-        Player p;
-        for(Iterator iterator1 = toKick.iterator(); iterator1.hasNext(); leave(p))
+		}
+        for(Iterator iterator1 = toKick.iterator(); iterator1.hasNext(); leave(p)) {
             p = (Player)iterator1.next();
-
+		}
     }
 
     private void getNextBuilder()
@@ -282,7 +299,7 @@ public class Game
             builder.teleport(spawn);
             builder.setDisplayName(builder.getName());
             builder.getInventory().clear();
-            BarAPI.removeBar(builder);
+            //BarAPI.removeBar(builder);
             builder = null;
         }
         for(int i = 0; i < buildPerPlayer; i++)
@@ -348,8 +365,8 @@ public class Game
         p.setDisplayName((new StringBuilder()).append(ChatColor.RED).append("[BUILDER] ").append(p.getName()).toString());
         sendMessage((new StringBuilder()).append(ChatColor.GOLD).append(ChatColor.BOLD).append(p.getName()).append(" is the drawer this round!").toString());
         setBarForAll((new StringBuilder()).append(ChatColor.YELLOW).append(ChatColor.BOLD).append("Guess ").append(ChatColor.WHITE).append(ChatColor.BOLD).append(wordf).toString());
-        BarAPI.setMessage(p, (new StringBuilder()).append(ChatColor.YELLOW).append("Your word is ").append(ChatColor.GOLD).append(ChatColor.BOLD).append(word).toString());
-        BarAPI.setHealth(p, 100F);
+        //BarAPI.setMessage(p, (new StringBuilder()).append(ChatColor.YELLOW).append("Your word is ").append(ChatColor.GOLD).append(ChatColor.BOLD).append(word).toString());
+        //BarAPI.setHealth(p, 100F);
     }
 
     public void sendMessage(String message)
@@ -363,7 +380,7 @@ public class Game
     public void setBarForAll(String message)
     {
         Player p;
-        for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); BarAPI.setMessage(p, message))
+        for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); /*BarAPI.setMessage(p, message)*/)
             p = (Player)iterator.next();
 
     }
@@ -371,7 +388,7 @@ public class Game
     public void setTimedBarForAll(String message, int seconds)
     {
         Player p;
-        for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); BarAPI.setMessage(p, message, seconds))
+        for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); /*BarAPI.setMessage(p, message, seconds)*/)
             p = (Player)iterator.next();
 
     }
@@ -379,7 +396,7 @@ public class Game
     public void removeBarForAll()
     {
         Player p;
-        for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); BarAPI.removeBar(p))
+        for(Iterator iterator = score.keySet().iterator(); iterator.hasNext(); /*BarAPI.removeBar(p)*/)
             p = (Player)iterator.next();
 
     }
@@ -480,7 +497,7 @@ public class Game
         wordf.setCharAt(randomLetter, word.charAt(randomLetter));
         setBarForAll((new StringBuilder()).append(ChatColor.YELLOW).append(ChatColor.BOLD).append("Guess ").append(ChatColor.WHITE).append(ChatColor.BOLD).append(wordf).toString());
         playSoundForAll(Sound.ITEM_PICKUP);
-        BarAPI.setMessage(builder, (new StringBuilder()).append(ChatColor.YELLOW).append("Your word is ").append(ChatColor.GOLD).append(ChatColor.BOLD).append(word).toString());
+        //BarAPI.setMessage(builder, (new StringBuilder()).append(ChatColor.YELLOW).append("Your word is ").append(ChatColor.GOLD).append(ChatColor.BOLD).append(word).toString());
     }
 
     public void setMinPlayers(int i)

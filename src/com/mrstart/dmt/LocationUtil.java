@@ -1,6 +1,8 @@
 package com.mrstart.dmt;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 public class LocationUtil
 {
@@ -20,9 +22,9 @@ public class LocationUtil
         try
         {
             World world = Bukkit.getWorld(s.split(":")[0]);
-            Double x = Double.valueOf(Double.parseDouble(s.split(":")[1]));
-            Double y = Double.valueOf(Double.parseDouble(s.split(":")[2]));
-            Double z = Double.valueOf(Double.parseDouble(s.split(":")[3]));
+            Double x = Double.parseDouble(s.split(":")[1]);
+            Double y = Double.parseDouble(s.split(":")[2]);
+            Double z = Double.parseDouble(s.split(":")[3]);
             l = new Location(world, x.doubleValue(), y.doubleValue(), z.doubleValue());
         }
         catch(Exception ex)

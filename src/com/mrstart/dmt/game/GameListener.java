@@ -2,21 +2,26 @@ package com.mrstart.dmt.game;
 
 import com.mrstart.dmt.ChatUtil;
 import com.mrstart.dmt.DrawMyThing;
-import java.util.List;
-import org.bukkit.*;
+import java.util.Set;
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.*;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.MetadataValue;
 
 // Referenced classes of package com.mrstart.dmt.game:
@@ -40,12 +45,14 @@ public class GameListener
 
     public void onPlayerPlaceBlock(BlockPlaceEvent event)
     {
-        if(event.getPlayer().hasMetadata("inbmt") && instance.getGameByName(((MetadataValue)event.getPlayer().getMetadata("inbmt").get(0)).asString()) != null)
-            event.setCancelled(true);
+        if(event.getPlayer().hasMetadata("inbmt") && instance.getGameByName(((MetadataValue)event.getPlayer().getMetadata("inbmt").get(0)).asString()) != null) {
+			event.setCancelled(true);
+		}
     }
 
     public void onPlayerInteract(PlayerInteractEvent event)
     {
+		Set<Material> set = null;
         if(!event.getPlayer().hasMetadata("inbmt"))
             return;
         if(instance.getGameByName(((MetadataValue)event.getPlayer().getMetadata("inbmt").get(0)).asString()) == null)
@@ -58,7 +65,7 @@ public class GameListener
             return;
         if(event.getPlayer().getItemInHand().getType() == Material.STICK && event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isBlocking())
         {
-            Block b = event.getPlayer().getTargetBlock(null, 100);
+            Block b = event.getPlayer().getTargetBlock(set, 100);
             if(b.getType() != Material.WOOL)
                 return;
             b.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
@@ -70,17 +77,18 @@ public class GameListener
         {
             if(event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
                 return;
-            Block b = event.getPlayer().getTargetBlock(null, 100);
+            Block b = event.getPlayer().getTargetBlock(set, 100);
             if(b.getType() != Material.WOOL)
                 return;
             b.setTypeIdAndData(Material.WOOL.getId(), DyeColor.WHITE.getData(), true);
-            if(instance.getConfig().getBoolean("tool-sound"))
-                event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BAT_TAKEOFF, 1.0F, 1.0F);
+            if(instance.getConfig().getBoolean("tool-sound")) {
+				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BAT_TAKEOFF, 1.0F, 1.0F);
+			}
             return;
         }
         if(event.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD && event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
         {
-            Block b = event.getPlayer().getTargetBlock(null, 100);
+            Block b = event.getPlayer().getTargetBlock(set, 100);
             Block b1 = b.getLocation().add(1.0D, 0.0D, 0.0D).getBlock();
             Block b2 = b.getLocation().add(0.0D, 1.0D, 0.0D).getBlock();
             Block b3 = b.getLocation().subtract(1.0D, 0.0D, 0.0D).getBlock();
