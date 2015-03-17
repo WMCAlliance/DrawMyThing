@@ -12,7 +12,7 @@ public class ChatUtil
 
     static 
     {
-        PREFIX = (new StringBuilder()).append(ChatColor.BLUE).append("[DrawMyThing] ").append(ChatColor.WHITE).toString();
+        PREFIX = (new StringBuilder()).append(ChatColor.BLUE).append("[DMT] ").append(ChatColor.WHITE).toString();
     }
 
 	public static void send(Player p, String message) {

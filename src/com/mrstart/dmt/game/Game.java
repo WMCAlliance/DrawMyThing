@@ -102,6 +102,7 @@ public class Game
     public ItemStack pencil;
     public ItemStack bp;
     public ItemStack eraser;
+	public ItemStack bucket;
     public ItemStack colorpicker;
 
 	public Game(CuboidZone build, Location spawn, Location bspawn, String name, DrawMyThing instance) {
@@ -124,16 +125,20 @@ public class Game
 		board = manager.getNewScoreboard();
 		pencil = new ItemStack(Material.STICK);
 		ItemMeta pm = pencil.getItemMeta();
-		pm.setDisplayName((new StringBuilder()).append(ChatColor.AQUA).append("Pencil").toString());
+		pm.setDisplayName((new StringBuilder()).append(ChatColor.AQUA).append("Brush").toString());
 		pencil.setItemMeta(pm);
 		bp = new ItemStack(Material.BLAZE_ROD);
 		ItemMeta bpm = bp.getItemMeta();
-		bpm.setDisplayName((new StringBuilder()).append(ChatColor.YELLOW).append("Big Pencil").toString());
+		bpm.setDisplayName((new StringBuilder()).append(ChatColor.YELLOW).append("Thick Brush").toString());
 		bp.setItemMeta(bpm);
 		eraser = new ItemStack(Material.WOOL, 1, DyeColor.RED.getData());
 		ItemMeta em = eraser.getItemMeta();
 		em.setDisplayName((new StringBuilder()).append(ChatColor.RED).append("Eraser").toString());
 		eraser.setItemMeta(em);
+		bucket = new ItemStack(Material.WATER_BUCKET);
+		ItemMeta cc = bucket.getItemMeta();
+		cc.setDisplayName((new StringBuilder()).append(ChatColor.GREEN).append("Clear Canvas").toString());
+		bucket.setItemMeta(cc);
 		colorpicker = new ItemStack(Material.WATCH);
 		ItemMeta ccm = colorpicker.getItemMeta();
 		ccm.setDisplayName((new StringBuilder()).append(ChatColor.GREEN).append("Choose Color").toString());
@@ -421,13 +426,16 @@ public class Game
 		p.getInventory().addItem(new ItemStack[] {
 			eraser
 		});
+		/*p.getInventory().addItem(new ItemStack[] {
+			bucket
+		});*/
 		p.getInventory().addItem(new ItemStack[] {
 			colorpicker
 		});
-		p.setDisplayName((new StringBuilder()).append(ChatColor.RED).append("[BUILDER] ").append(p.getName()).toString());
-		sendMessage((new StringBuilder()).append(ChatColor.GOLD).append(ChatColor.BOLD).append(p.getName()).append(" is the drawer this round!").toString());
+		sendMessage((new StringBuilder()).append(ChatColor.GOLD).append(ChatColor.BOLD).append(p.getName()).append(" is now drawing!").toString());
 		setBarForAll((new StringBuilder()).append(ChatColor.YELLOW).append(ChatColor.BOLD).append("Guess ").append(ChatColor.WHITE).append(ChatColor.BOLD).append(wordf).toString());
 		//BarAPI.setMessage(p, (new StringBuilder()).append(ChatColor.YELLOW).append("Your word is ").append(ChatColor.GOLD).append(ChatColor.BOLD).append(word).toString());
+		p.sendMessage((new StringBuilder()).append(ChatColor.YELLOW).append("Your word is ").append(ChatColor.GOLD).append(ChatColor.BOLD).append(word).toString());
 		//BarAPI.setHealth(p, 100F);
 	}
 	

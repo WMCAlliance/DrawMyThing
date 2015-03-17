@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -29,7 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 // Referenced classes of package com.mrstart.dmt:
 //            ChatUtil, LocationUtil
 
-public class DrawMyThing extends JavaPlugin
+public class DrawMyThing extends JavaPlugin implements Listener
 {
 	public static Logger logger;
 	public static final List DEFAULT_WORDS = new ArrayList(Arrays.asList(new String[] {
@@ -112,7 +113,7 @@ public class DrawMyThing extends JavaPlugin
 	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = getDescription();
-        getLogger().info((new StringBuilder(String.valueOf(pdfFile.getName()))).append("Disabled !").toString());
+        getLogger().info((new StringBuilder(String.valueOf(pdfFile.getName()))).append("Disabled!").toString());
         List names = new ArrayList();
         Game b;
 		for(Iterator iterator = games.iterator(); iterator.hasNext(); b.save(getConfig()))
@@ -306,19 +307,20 @@ public class DrawMyThing extends JavaPlugin
 													if(player.hasPermission("dmt.admin"))
 													{
 														//TODO change this to work differently and have categories
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setcanvaspos1 ").append(ChatColor.GRAY).append("Set the first point to your current position").toString());
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setcanvaspos2 ").append(ChatColor.GRAY).append("Set the second point to your current position").toString());
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setspawn ").append(ChatColor.GRAY).append("Set the spawn point to your current position").toString());
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt create <gameName> ").append(ChatColor.GRAY).append("Create a new game with the specified name").toString());
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt delete <gameName> ").append(ChatColor.GRAY).append("Remove the game with the specified name").toString());
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setmin <gameName> ").append(ChatColor.GRAY).append("Change min players to start the game of the specified name").toString());
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setmax <gameName> ").append(ChatColor.GRAY).append("Change player limit of the game wih the specified name").toString());
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt reload").append(ChatColor.GRAY).append("Reload the plugin").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setcanvaspos1 ").append(ChatColor.GRAY).append("Left corner (feet pos)").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setcanvaspos2 ").append(ChatColor.GRAY).append("Right corner (feet pos)").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setspawn ").append(ChatColor.GRAY).append("Player spawn (current pos)").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setbuilerspawn ").append(ChatColor.GRAY).append("Builder spawn (current pos, air)").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt create <gameName> ").append(ChatColor.GRAY).append("Create a new game").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt delete <gameName> ").append(ChatColor.GRAY).append("Delete a game").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setmin <gameName> ").append(ChatColor.GRAY).append("Set minimum player count").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt setmax <gameName> ").append(ChatColor.GRAY).append("Set maximum player count").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt reload ").append(ChatColor.GRAY).append("Reload the plugin config").toString());
 													}
 													if(player.hasPermission("dmt.default"))
 													{
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt join <gameName> ").append(ChatColor.GRAY).append("Join the game with the specified name").toString());
-														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt leave ").append(ChatColor.GRAY).append("Leave your current game").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt join <gameName> ").append(ChatColor.GRAY).append("Join a game").toString());
+														player.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append("/dmt leave ").append(ChatColor.GRAY).append("Leave the current game").toString());
 													}
 												} else
 												{

@@ -2,13 +2,17 @@ package com.mrstart.dmt.game;
 
 import com.mrstart.dmt.ChatUtil;
 import com.mrstart.dmt.DrawMyThing;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -20,7 +24,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 // Referenced classes of package com.mrstart.dmt.game:
@@ -39,6 +42,7 @@ public class GameListener
         this.instance = instance;
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerLogOut(PlayerQuitEvent event)
     {
         if(event.getPlayer().hasMetadata("inbmt")) {
@@ -46,6 +50,7 @@ public class GameListener
 		}
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerPlaceBlock(BlockPlaceEvent event)
     {
         if(event.getPlayer().hasMetadata("inbmt") && instance.getGameByName(event.getPlayer().getMetadata("inbmt").get(0).asString()) != null) {
@@ -53,9 +58,11 @@ public class GameListener
 		}
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-		Set<Material> set = null;
+		//Set<Material> set = null;
+		HashSet<Byte> set = null;
         if(!event.getPlayer().hasMetadata("inbmt")) {
 			return;
 		}
@@ -71,24 +78,44 @@ public class GameListener
         if(event.getPlayer().getItemInHand() == null) {
 			return;
 		}
-        if(event.getPlayer().getItemInHand().getType() == Material.STICK && event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isBlocking())
+        if(event.getPlayer().getItemInHand().getType() == Material.STICK && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
         {
-            Block b = event.getPlayer().getTargetBlock(set, 100);
+			List<Block> blocks = new ArrayList();
+            Block b = (Block)event.getPlayer().getTargetBlock(set, 100);
+			blocks.add(b);
+            Block b1 = b.getLocation().add(1.0D, 0.0D, 0.0D).getBlock();
+			blocks.add(b1);
+            Block b2 = b.getLocation().add(0.0D, 1.0D, 0.0D).getBlock();
+			blocks.add(b2);
+            Block b3 = b.getLocation().subtract(1.0D, 0.0D, 0.0D).getBlock();
+			blocks.add(b3);
+            Block b4 = b.getLocation().subtract(0.0D, 1.0D, 0.0D).getBlock();
+			blocks.add(b4);
             if(b.getType() != Material.WOOL) {
 				return;
 			}
-            b.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
+			for(Block bl : blocks) {
+				if(bl.getType() == Material.WOOL) {
+					bl.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
+				}
+			}
             if(instance.getConfig().getBoolean("tool-sound")) {
 				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.FIZZ, 1.0F, 1.0F);
 			}
             return;
         }
-        if(event.getPlayer().getItemInHand().getType() == Material.WOOL && event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+        if(event.getPlayer().getItemInHand().getType() == Material.WATER_BUCKET && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
+        {
+			for(Object ob : game.getBuildZone().toArray()) {
+				((Block)ob).setData((byte)0);
+			}
+		}
+        if(event.getPlayer().getItemInHand().getType() == Material.WOOL && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
         {
             if(event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 				return;
 			}
-            Block b = event.getPlayer().getTargetBlock(set, 100);
+            Block b = (Block)event.getPlayer().getTargetBlock(set, 100);
             if(b.getType() != Material.WOOL) {
 				return;
 			}
@@ -98,41 +125,56 @@ public class GameListener
 			}
             return;
         }
-        if(event.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD && event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+        if(event.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
         {
-            Block b = event.getPlayer().getTargetBlock(set, 100);
+			List<Block> blocks = new ArrayList();
+            Block b = (Block)event.getPlayer().getTargetBlock(set, 100);
+			blocks.add(b);
             Block b1 = b.getLocation().add(1.0D, 0.0D, 0.0D).getBlock();
+			blocks.add(b1);
             Block b2 = b.getLocation().add(0.0D, 1.0D, 0.0D).getBlock();
+			blocks.add(b2);
             Block b3 = b.getLocation().subtract(1.0D, 0.0D, 0.0D).getBlock();
+			blocks.add(b3);
             Block b4 = b.getLocation().subtract(0.0D, 1.0D, 0.0D).getBlock();
-            if(b.getType() != Material.WOOL) {
-				return;
+			blocks.add(b4);
+            Block b5 = b.getLocation().subtract(1.0D, 0.0D, 0.0D).add(0.0D, 1.0D, 0.0D).getBlock();
+			blocks.add(b5);
+            Block b6 = b.getLocation().add(1.0D, 1.0D, 0.0D).getBlock();
+			blocks.add(b6);
+            Block b7 = b.getLocation().subtract(1.0D, 1.0D, 0.0D).getBlock();
+			blocks.add(b7);
+            Block b8 = b.getLocation().add(1.0D, 0.0D, 0.0D).subtract(0.0D, 1.0D, 0.0D).getBlock();
+			blocks.add(b8);
+			Block b9 = b.getLocation().add(0.0D, 2.0D, 0.0D).getBlock();
+			blocks.add(b9);
+			Block b10 = b.getLocation().subtract(2.0D, 0.0D, 0.0D).getBlock();
+			blocks.add(b10);
+			Block b11 = b.getLocation().subtract(0.0D, 2.0D, 0.0D).getBlock();
+			blocks.add(b11);
+			Block b12 = b.getLocation().add(2.0D, 0.0D, 0.0D).getBlock();
+			blocks.add(b12);
+			
+			for(Block bl : blocks) {
+				if(bl.getType() == Material.WOOL) {
+					bl.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
+				}
 			}
-            b.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
-            b1.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
-            b2.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
-            b3.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
-            b4.setTypeIdAndData(Material.WOOL.getId(), color.getData(), true);
             if(instance.getConfig().getBoolean("tool-sound")) {
 				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.FIZZ, 1.0F, 1.0F);
 			}
             return;
         }
-        if(event.getPlayer().getItemInHand().getType() == Material.WATCH)
-        {
-            if(event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
-            {
-            } else
-            {
+        if(event.getPlayer().getItemInHand().getType() == Material.WATCH) {
+            if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 instance.cci.clear();
                 instance.addCCIItems();
                 event.getPlayer().openInventory(instance.cci);
             }
-        } else
-        {
         }
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event)
     {
         if(event.getPlayer().hasMetadata("inbmt") && !event.getMessage().startsWith("/dmt") && !event.getPlayer().hasPermission("dmt.admin"))
@@ -142,6 +184,7 @@ public class GameListener
         }
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerBreakBlock(BlockBreakEvent event)
     {
         if(event.getPlayer().hasMetadata("inbmt")) {
@@ -149,6 +192,7 @@ public class GameListener
 		}
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
         if(event.getPlayer().hasMetadata("inbmt")) {
@@ -156,6 +200,7 @@ public class GameListener
 		}
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerHit(EntityDamageEvent event)
     {
         if(event.getEntity() instanceof Player)
@@ -167,6 +212,7 @@ public class GameListener
         }
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerHungerChange(FoodLevelChangeEvent event)
     {
         if(event.getEntity().hasMetadata("inbmt")) {
@@ -174,6 +220,7 @@ public class GameListener
 		}
     }
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
         if(event.getPlayer().hasMetadata("inbmt") && instance.getGameByName(event.getPlayer().getMetadata("inbmt").get(0).asString()) != null && instance.getGameByName(event.getPlayer().getMetadata("inbmt").get(0).asString()).isStarted()) {
@@ -194,6 +241,7 @@ public class GameListener
 		}
     }
 
+	/*@EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerMove(PlayerMoveEvent event)
     {
         if(event.getPlayer().hasMetadata("inbmt") && instance.getGameByName(event.getPlayer().getMetadata("inbmt").get(0).asString()) != null && instance.getGameByName(event.getPlayer().getMetadata("inbmt").get(0).asString()).isStarted() && event.getPlayer().getDisplayName().contains("[BUILDER]"))
@@ -203,8 +251,9 @@ public class GameListener
 			}
             event.setTo(event.getFrom());
         }
-    }
+    }*/
 
+	@EventHandler (priority = EventPriority.NORMAL)
     public void onInvClick(InventoryClickEvent event)
     {
         Player p = (Player)event.getWhoClicked();

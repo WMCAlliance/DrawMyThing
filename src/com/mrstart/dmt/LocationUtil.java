@@ -9,7 +9,7 @@ public class LocationUtil
 
     public static String LocationToString(Location l)
 	{
-		return (new StringBuilder(String.valueOf(String.valueOf((new StringBuilder(String.valueOf(l.getWorld().getName()))).append(":").append(l.getBlockX()).toString())))).append(":").append(String.valueOf(l.getBlockY())).append(":").append(String.valueOf(l.getBlockZ())).toString(); //TODO Improve
+		return (new StringBuilder(String.valueOf(String.valueOf((new StringBuilder(String.valueOf(l.getWorld().getName()))).append(":").append(l.getBlockX()).toString())))).append(":").append(String.valueOf(l.getBlockY())).append(":").append(String.valueOf(l.getBlockZ())).append(":").append(String.valueOf(l.getYaw())).append(":").append(String.valueOf(l.getPitch())).toString(); //TODO Improve
 	}
 
     public static Location StringToLoc(String s)
@@ -21,7 +21,9 @@ public class LocationUtil
 			Double x = Double.parseDouble(s.split(":")[1]);
 			Double y = Double.parseDouble(s.split(":")[2]);
 			Double z = Double.parseDouble(s.split(":")[3]);
-			l = new Location(world, x, y, z);
+			Float pitch = Float.parseFloat(s.split(":")[4]);
+			Float yaw = Float.parseFloat(s.split(":")[5]);
+			l = new Location(world, x, y, z, yaw, pitch);
 		}
 		catch(Exception ex)
 		{
