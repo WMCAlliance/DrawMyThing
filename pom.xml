@@ -6,7 +6,7 @@
 
     <groupId>com.mrstart</groupId>
     <artifactId>DrawMyThing</artifactId>
-    <version>release</version>
+    <version>dev</version>
 
     <repositories>
         <repository>
